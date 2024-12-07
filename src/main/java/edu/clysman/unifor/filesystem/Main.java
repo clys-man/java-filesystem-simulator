@@ -305,18 +305,18 @@ public class Main {
     private static void showHelp() {
         System.out.println("""
                 Comandos disponíveis:
-                mkdir <nome>        - Cria um diretório
-                cd <nome>           - Altera o diretório atual
-                ls                  - Lista o conteúdo do diretório atual
-                touch <nome>        - Cria um arquivo vazio
-                write <arq> <texto> - Escreve no arquivo especificado
-                cat <nome>          - Lê o conteúdo do arquivo
-                rm <nome>           - Remove um arquivo
-                rmdir <nome>        - Remove um diretório vazio
-                rename <velho> <novo> - Renomeia um arquivo ou diretório
-                log                 - Exibe o log de ações
-                help                - Mostra esta ajuda
-                exit                - Salva e encerra o sistema de arquivos
+                mkdir <nome>           - Cria um diretório
+                cd <nome>              - Altera o diretório atual
+                ls                     - Lista o conteúdo do diretório atual
+                touch <nome>           - Cria um arquivo vazio
+                write <arq> <texto>    - Escreve no arquivo especificado
+                cat <nome>             - Lê o conteúdo do arquivo
+                rm <nome>              - Remove um arquivo
+                rmdir <nome>           - Remove um diretório vazio
+                rename <velho> <novo>  - Renomeia um arquivo ou diretório
+                log                    - Exibe o log de ações
+                help                   - Mostra esta ajuda
+                exit                   - Salva e encerra o sistema de arquivos
                 """);
     }
 }
