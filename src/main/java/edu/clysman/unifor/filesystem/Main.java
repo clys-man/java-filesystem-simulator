@@ -139,8 +139,8 @@ public class Main {
             System.out.println("Uso: write <texto> <arquivo>");
             return;
         }
-        String content = parts[0];
-        String fileName = parts[1];
+        String fileName = parts[0];
+        String content = String.join(" ", Arrays.copyOfRange(parts, 1, parts.length));
         String action = "WRITE " + fileName + " " + content;
 
         logPendingAction(action);
@@ -309,7 +309,7 @@ public class Main {
                 cd <nome>           - Altera o diretório atual
                 ls                  - Lista o conteúdo do diretório atual
                 touch <nome>        - Cria um arquivo vazio
-                write <texto> <arq> - Escreve no arquivo especificado
+                write <arq> <texto> - Escreve no arquivo especificado
                 cat <nome>          - Lê o conteúdo do arquivo
                 rm <nome>           - Remove um arquivo
                 rmdir <nome>        - Remove um diretório vazio
