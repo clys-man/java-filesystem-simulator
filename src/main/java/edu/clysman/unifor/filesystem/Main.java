@@ -103,8 +103,6 @@ public class Main {
     }
 
     private static void changeDirectory(String name) throws IOException {
-        String action = "CD " + name;
-        logPendingAction(action);
         if (name.equals("..")) {
             if (currentDirectory.getParent() != null) {
                 currentDirectory = currentDirectory.getParent();
@@ -117,7 +115,6 @@ public class Main {
                 System.out.println("Diretório não encontrado.");
             }
         }
-        logCommittedAction(action);
     }
 
     private static void createFile(String name) throws IOException {
@@ -282,7 +279,6 @@ public class Main {
 
         switch (command) {
             case "MKDIR" -> makeDirectory(argument);
-            case "CD" -> changeDirectory(argument);
             case "TOUCH" -> createFile(argument);
             case "WRITE" -> {
                 String[] writeParts = argument.split(" ", 2);

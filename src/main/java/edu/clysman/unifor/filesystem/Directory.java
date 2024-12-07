@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Directory implements Serializable {
-    private final String name;
+    private String name;
     private final Directory parent;
     private final Map<String, Directory> subdirectories = new HashMap<>();
     private final Map<String, FileNode> files = new HashMap<>();
@@ -56,8 +56,23 @@ class Directory implements Serializable {
         return null;
     }
 
-    boolean removeSubdirectory(String name) {
-        return subdirectories.remove(name) != null;
+    boolean removeSubdirectory(String path) {
+        if (path == null || path.isEmpty()) return false;
+
+        String[] parts = path.split("/");
+        String currentPart = parts[0];
+
+        if (parts.length == 1) {
+            return subdirectories.remove(currentPart) != null;
+        }
+
+        Directory subdirectory = subdirectories.get(currentPart);
+        if (subdirectory != null) {
+            String newPath = String.join("/", Arrays.copyOfRange(parts, 1, parts.length));
+            return subdirectory.removeSubdirectory(newPath);
+        }
+
+        return false;
     }
 
     boolean addFile(String name) {
@@ -87,22 +102,53 @@ class Directory implements Serializable {
         return null;
     }
 
-    boolean removeFile(String name) {
-        return files.remove(name) != null;
+    boolean removeFile(String path) {
+        if (path == null || path.isEmpty()) return false;
+
+        String[] parts = path.split("/");
+        String currentPart = parts[0];
+
+        if (parts.length == 1) {
+            return files.remove(currentPart) != null;
+        }
+
+        Directory subdirectory = subdirectories.get(currentPart);
+        if (subdirectory != null) {
+            String newPath = String.join("/", Arrays.copyOfRange(parts, 1, parts.length));
+            return subdirectory.removeFile(newPath);
+        }
+
+        return false;
     }
 
-    boolean rename(String oldName, String newName) {
-        if (files.containsKey(oldName)) {
-            FileNode file = files.remove(oldName);
-            file.setName(newName);
-            files.put(newName, file);
-            return true;
+    boolean rename(String path, String newName) {
+        if (path == null || path.isEmpty() || newName == null || newName.isEmpty()) return false;
+
+        String[] parts = path.split("/");
+        String currentPart = parts[0];
+
+        if (parts.length == 1) {
+            if (files.containsKey(currentPart)) {
+                FileNode file = files.remove(currentPart);
+                file.setName(newName);
+                files.put(newName, file);
+                return true;
+            }
+            if (subdirectories.containsKey(currentPart)) {
+                Directory dir = subdirectories.remove(currentPart);
+                dir.name = newName;
+                subdirectories.put(newName, dir);
+                return true;
+            }
+            return false;
         }
-        if (subdirectories.containsKey(oldName)) {
-            Directory dir = subdirectories.remove(oldName);
-            subdirectories.put(newName, dir);
-            return true;
+
+        Directory subdirectory = subdirectories.get(currentPart);
+        if (subdirectory != null) {
+            String newPath = String.join("/", Arrays.copyOfRange(parts, 1, parts.length));
+            return subdirectory.rename(newPath, newName);
         }
+
         return false;
     }
 
