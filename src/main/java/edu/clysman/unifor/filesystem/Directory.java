@@ -2,6 +2,7 @@ package edu.clysman.unifor.filesystem;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +35,25 @@ class Directory implements Serializable {
         return true;
     }
 
-    Directory getSubdirectory(String name) {
-        return subdirectories.get(name);
+    Directory getSubdirectory(String path) {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+
+        String[] parts = path.split("/");
+        String currentPart = parts[0];
+
+        if (parts.length == 1) {
+            return subdirectories.get(currentPart);
+        }
+
+        Directory subdirectory = subdirectories.get(currentPart);
+        if (subdirectory != null) {
+            String newPath = String.join("/", Arrays.copyOfRange(parts, 1, parts.length));
+            return subdirectory.getSubdirectory(newPath);
+        }
+
+        return null;
     }
 
     boolean removeSubdirectory(String name) {
@@ -48,8 +66,25 @@ class Directory implements Serializable {
         return true;
     }
 
-    FileNode getFile(String name) {
-        return files.get(name);
+    FileNode getFile(String path) {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+
+        String[] parts = path.split("/");
+        String currentPart = parts[0];
+
+        if (parts.length == 1) {
+            return files.get(currentPart);
+        }
+
+        Directory subdirectory = subdirectories.get(currentPart);
+        if (subdirectory != null) {
+            String newPath = String.join("/", Arrays.copyOfRange(parts, 1, parts.length));
+            return subdirectory.getFile(newPath);
+        }
+
+        return null;
     }
 
     boolean removeFile(String name) {
